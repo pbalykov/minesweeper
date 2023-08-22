@@ -13,7 +13,7 @@ This project is a miner game that includes source code, build automation scripts
 
 ## Example
 
-![Example](./gif/Example.gif)
+![Example](./gif/game.gif)
 
 ## Authors
 

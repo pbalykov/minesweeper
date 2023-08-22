@@ -10,6 +10,7 @@ namespace {
 }
 
 void printField(std::pair<int, int> begin_curses, const Minesweeper& other);
-int printGame(const Minesweeper& other, std::pair<int, int> cursor_game);
+int printGame(const Minesweeper& other, std::pair<int, int> cursor_game, 
+              int time);
 
 #endif

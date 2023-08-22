@@ -76,7 +76,7 @@ namespace {
 }
 
 
-int printGame(const Minesweeper& other, std::pair<int, int> cursor_game) {
+int printGame(const Minesweeper& other, std::pair<int, int> cursor_game, int time) {
    std::pair<int, int> size_term(size_terminal()); 
    std::pair<int, int> size_field(other.size());
    int characters_height = size_field.first + 7;
@@ -102,7 +102,7 @@ int printGame(const Minesweeper& other, std::pair<int, int> cursor_game) {
    cursor.second = size_term.second / 2 - size_field.second / 2 ;
    cursor.second += size_field.second - 2 ; 
    tableBorder(cursor, std::make_pair(1, 3));
-   printw("000");
+   printw("%03d", time);
 
    cursor.first += 3;
    cursor.second = size_term.second / 2 - (size_field.second + 2) / 2; 

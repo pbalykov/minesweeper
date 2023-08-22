@@ -9,9 +9,6 @@ public:
     int exec();
     bool menu();
     int game();
-
-private:
-    int _time;
 };
 
 #endif
