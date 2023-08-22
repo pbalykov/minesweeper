@@ -13,7 +13,7 @@ This project is a miner game that includes source code, build automation scripts
 
 ## Example
 
-![Example](./gif/game.gif)
+![Example](https://github.com/pbalykov/minesweepes/blob/main/gif/game.gif)
 
 ## Authors
 
