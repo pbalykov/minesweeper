@@ -151,10 +151,11 @@ bool Minesweeper::set_index(int i, int j, USER_ACTION other) {
     }
     else if (other == USER_ACTION::OPEN ) {
 	this->_end_game = this->_open_cell(i, j);
-	int number_free_cell = this->size().first * this->size().second;
-	number_free_cell -= this->_complexity_game.get_number_bomb(); 
-	this->_end_game = this->_number_cell == number_free_cell ?
-		                                     true : this->_end_game;
+
     }
+    int number_free_cell = this->size().first * this->size().second;
+    number_free_cell -= this->_complexity_game.get_number_bomb(); 
+    this->_end_game = this->_number_cell == number_free_cell && 
+		      !this->_number_flag ? true : this->_end_game;
     return this->_end_game;
 }
