@@ -1,5 +1,7 @@
 # Minesweeper game
 
+#!!!!GAME the game is running but there is no time, more time is in progress
+
 ## Description of the project.
 
 This project is a miner game that includes source code, build automation scripts. This makes it easy to install and play the game. 
