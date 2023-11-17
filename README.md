@@ -14,7 +14,7 @@ This project is a miner game that includes source code, build automation scripts
 ## Example
 
 <div id="header" align="center">
-     <img src="./gif/game.gif" height="600"/><br>
+     <img src="./gif/game.gif" height="500"/><br><br>
 </div> 
 
 ## Authors

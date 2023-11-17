@@ -21,7 +21,6 @@ public:
     short get_number_bomb() const;
     COMPLEXITY get_complexity() const;
 
-    static Complexity_Game make(COMPLEXITY value = COMPLEXITY::EASY);   
 private:
     COMPLEXITY _type_complexity;
     int _rows;

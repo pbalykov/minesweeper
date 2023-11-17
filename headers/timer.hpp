@@ -7,18 +7,18 @@ class Timer {
 public:
     Timer();
     
-    ttime_t start();
-    ttime_t stop();
-    ttime_t pause();
+    void start();
+    void stop();
+    void resume();
 
-    ttime_t get_time() const;
+    time_t get_time() const;
 
-    static ttime_t time(time_t* time = nullptr);
+    static time_t time(time_t* value_time = nullptr);
 
 private:
-    bool _job_timer;
-    ttime_t _start_time;
-    ttime_t _pause_time;
+    bool _run_timer;
+    time_t _start_time;
+    time_t _pause_time;
 };
 
 #endif

@@ -1,7 +1,6 @@
-#include "../headers/interface.hpp"
+#include "../headers/interfase.hpp"
 
-
-int main() {
-   Interface root;
-   return root.exec();
-}
+int main(void) {
+    Interfase value;
+    return value.exec();
+}    

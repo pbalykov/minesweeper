@@ -1,26 +1,20 @@
 #include "../headers/complexity.hpp"
 
-Complexity_Game Complexity_Game::make(COMPLEXITY value) {
-   Complexity_Game ans;
-   switch ( value ) {
-       case COMPLEXITY::EASY :
-	   ans = Complexity_Game(9, 9, 10);
-           break;
-       case COMPLEXITY::NORMAL :
-	   ans = Complexity_Game(16, 16, 40);
-	   break;
-       case COMPLEXITY::HARD :
-	   ans = Complexity_Game(16, 30, 99);
-	   break;
-       default:
-	   ans = Complexity_Game(0, 0, 0);
-   }
-   ans._type_complexity = value;
-   return ans;
-};
-
 Complexity_Game::Complexity_Game(COMPLEXITY value) {
-    *this = Complexity_Game::make(value);
+    switch ( value ) {
+        case COMPLEXITY::EASY :
+	    *this = Complexity_Game(9, 9, 10);
+            break;
+        case COMPLEXITY::NORMAL :
+	    *this = Complexity_Game(16, 16, 40);
+	    break;
+        case COMPLEXITY::HARD :
+	    *this = Complexity_Game(16, 30, 99);
+	    break;
+        default:
+	    *this = Complexity_Game(0, 0, 0);
+    }
+    this->_type_complexity = value;
     return ;
 }
 
