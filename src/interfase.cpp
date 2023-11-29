@@ -20,6 +20,7 @@ Interfase::Interfase() : _error(nullptr), _render(nullptr) {
     noecho();
     this->_render = new Render;
     keypad(stdscr, true);  
+    cbreak();
     std::srand(std::time(nullptr));
     return ;
 }
@@ -77,38 +78,41 @@ int Interfase::_main_menu() {
 int Interfase::game() {
     Complexity_Game complexity;
     this->_choice_complexity(complexity);
-    this->_game = Minesweeper(complexity);
+    this->_game.start(complexity);
     auto len_game = this->_game.size();
-    int cursor_x = 0, cursor_y = 0;
+    timeout(500);
     while ( !this->_game.get_end_game() ) {
-        this->_render->draw_game(this->_game, cursor_y, cursor_x);
+        wclear(stdscr);
+        this->_render->draw_game(this->_game);
       	auto key = getch();
         switch ( key ) {
     	    case KEY_UP :
-                cursor_y = ( (cursor_y - 1) % len_game.first + len_game.first);
-                cursor_y %= len_game.first;
+                this->_game.set_cell(Game_Minesweeper::TYPE_STEP::UP);
                 break;
     	    case KEY_DOWN :
-    	        cursor_y = (cursor_y + 1) % len_game.first;
+                this->_game.set_cell(Game_Minesweeper::TYPE_STEP::DOWN);
     	        break;
     	    case KEY_LEFT :
-		        cursor_x = (cursor_x - 1) % len_game.second + len_game.second;
-                cursor_x %= len_game.second;
+                this->_game.set_cell(Game_Minesweeper::TYPE_STEP::LEFT);
         		break;
     	    case KEY_RIGHT :
-	        	cursor_x = (cursor_x + 1) % len_game.second;
+	            this->_game.set_cell(Game_Minesweeper::TYPE_STEP::RIGHT);
     	        break;
     	    case 'f':
-	        	this->_game.set_index(cursor_y, cursor_x, USER_ACTION::FLAG);
+                this->_game.set_cell(Game_Minesweeper::TYPE_STEP::FLAG);
         		break;
     	    case KEY_BACKSPACE :
-    	    	this->_game.set_index(cursor_y, cursor_x, USER_ACTION::DELETION);
-        		break;
+                this->_game.set_cell(Game_Minesweeper::TYPE_STEP::DELETE);
+       		    break;
 	        case '\n':
-        		this->_game.set_index(cursor_y, cursor_x, USER_ACTION::OPEN);
-        		break;
+                this->_game.set_cell(Game_Minesweeper::TYPE_STEP::OPEN);
+       		    break;
         }
     }
+    timeout(-1);
+    wclear(stdscr);
+    this->_render->draw_game(this->_game);
+    getch();
     return 0;
 }
 
@@ -149,6 +153,7 @@ int Interfase::_choice_complexity(Complexity_Game& value) {
             case '\n':
                 end_choice_comp = false;
                 value = Complexity_Game(static_cast<enum COMPLEXITY>(cursor + 1));
+                break ;
         }
     }
     return 0;

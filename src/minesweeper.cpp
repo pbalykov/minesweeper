@@ -150,7 +150,7 @@ bool Minesweeper::set_index(int i, int j, USER_ACTION other) {
 	    bool value_flag =  this->_data[i][j].state_user == TYPE_CELL::FLAG;
 	    this->_number_flag -= value_flag ? 0 : 1;
 	    this->_data[i][j].state_user = TYPE_CELL::FLAG;
-    } else if ( other == USER_ACTION::DELETION && 
+    } else if ( other == USER_ACTION::DELETE && 
 	           this->_data[i][j].state_user == TYPE_CELL::FLAG ) { 
     	bool value_flag = this->_data[i][j].state_user == TYPE_CELL::FLAG;
 	    this->_number_flag += value_flag ? 1 : 0;

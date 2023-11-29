@@ -1,6 +1,6 @@
 # Minesweeper game
 
-#!!!!GAME the game is running but there is no time, more time is in progress
+# !!!!GAME works but not completely, no pause, no frame does not display end-of-game statistics
 
 ## Description of the project.
 

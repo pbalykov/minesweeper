@@ -8,7 +8,7 @@
 enum class USER_ACTION {
     OPEN,
     FLAG,
-    DELETION,
+    DELETE,
 };
 
 class Minesweeper {

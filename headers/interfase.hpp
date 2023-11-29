@@ -2,7 +2,7 @@
 #define INTERFASE_HPP
 
 #include <string_view>
-#include "minesweeper.hpp"
+#include "game_minesweeper.hpp"
 #include "render.hpp"
 
 
@@ -38,7 +38,7 @@ private:
 
     char* _error;
     Render* _render;
-    Minesweeper _game;
+    Game_Minesweeper _game;
 };
 
 #endif

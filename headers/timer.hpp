@@ -5,15 +5,18 @@
 
 class Timer {
 public:
+
+    static constexpr time_t* DEFAULT_TIME = nullptr;
+
     Timer();
     
     void start();
     void stop();
-    void resume();
+    void reset();
 
     time_t get_time() const;
 
-    static time_t time(time_t* value_time = nullptr);
+    static time_t time(time_t* value_time = Timer::DEFAULT_TIME);
 
 private:
     bool _run_timer;

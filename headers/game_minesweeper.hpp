@@ -1,42 +1,47 @@
-#ifndef GAME_MINESWEEPER_HPP
-#define GAME_MINESWEEPER_HPP
+#ifndef GAME_MINESWEEPER_CPP
+#define GAME_MINESWEEPER_CPP
 
 #include "minesweeper.hpp"
 #include "timer.hpp"
 
-enum class END_GAME {
-    LOSE = -1,
+enum class TYPE_END_GAME {
+    WING = 1,
     NONE = 0,
-    WIN = 1,
-    STOP_TIME = 2,
+    LOSS = -1,
+    END_TIME = -2,
 };
-
-enum class STEP {
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN,
-    OPEN,
-    FLAG,
-};    
 
 class Game_Minesweeper {
 public:
-    Game_Minesweeper(COMPLEXITY value = COMPLEXITY::EASY, int time = 1000);
+    enum class TYPE_STEP {
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN,
+        OPEN,
+        FLAG, 
+        DELETE,
+    };
 
-    END_GAME get_end() const;
-    int get_time() const;
-    
+    Game_Minesweeper(time_t max_time = 1000);
+    void start(const Complexity_Game& value);
+    void pause();
+    bool get_end_game() const;
+    const Minesweeper& get_minesweeper() const;
+    time_t get_time() const;
+    std::pair<int, int> size() const;
+    void set_cell(TYPE_STEP other);
+    std::pair<TYPE_CELL, short> get_cell(int i, int j) const;
+    int get_cursor_x() const;
+    int get_cursor_y() const;
+    short get_flag() const;
 
 private:
-    void _mod_curses();
- 
-//    Timer _time;
-    int _max_time;
-    END_GAME _end;
-    Minesweeper _game; 
-    std::pair<int, int> _cursor;
-
+    int _cursor_x;
+    int _cursor_y;
+    time_t _max_time;
+    Timer _time;
+    Minesweeper _game;
 };
 
 #endif

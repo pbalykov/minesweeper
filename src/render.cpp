@@ -1,6 +1,4 @@
 #include "../headers/render.hpp"
-#include <ncurses.h>
-#include <iostream>
 
 namespace {
     void repeat(int value_char, int size) {
@@ -11,21 +9,23 @@ namespace {
     }
 }
 
-void Render::_draw_table(int begin_y, int begin_x, int y, int x) const {
+void Render::_draw_table(int begin_y, int begin_x, int y, int x,
+        int first_begin, int second_begin, int first_end, int second_end, 
+        int center_x, int center_y) const {
     move(begin_y, begin_x);
-   	addch(ACS_ULCORNER);
-    repeat(ACS_HLINE, x);
-	addch(ACS_URCORNER);
+   	addch(first_begin);
+    repeat(center_x, x);
+	addch(second_begin);
 	for (int i = 0; i < y; i++) {
 	    move(begin_y + i + 1, begin_x);
-	    addch(ACS_VLINE);
+	    addch(center_y);
 	    move(begin_y + i + 1, begin_x + x + 1);
-	    addch(ACS_VLINE);
+	    addch(center_y);
 	}
     move(begin_y + y + 1, begin_x);
-    addch(ACS_LLCORNER);
-	repeat(ACS_HLINE, x);
-	addch(ACS_LRCORNER);
+    addch(first_end);
+	repeat(center_x, x);
+	addch(second_end);
     move(begin_y + y + 1, begin_x + x + 1);
     return ;
 }
@@ -85,15 +85,46 @@ int Render::abaut_game(const std::string_view* value, int size_y, int size_x) {
     return 0;
 }
 
-int Render::draw_game(const Minesweeper& other, int y, int x) {
-    std::pair<int, int> size_field = other.size();
-    move(0, 0);
+int Render::draw_game(const Game_Minesweeper& other) {
+    auto size_field = other.size();
+    int y, x;
+    this->_size_terminal(y, x);
+    int begin_y_folder = y / 2 - size_field.first / 2 ;
+    int begin_x_folder = x / 2 - size_field.second / 2;
+    time_t time = other.get_time();
+    short flag = other.get_flag();
+    this->_draw_flag_time(time, flag, begin_y_folder - 3, begin_x_folder - 3,
+                          begin_x_folder + size_field.second);
+//    this->_draw_table(begin_y_folder, begin_x_folder, 
+//            size_field.first, size_field.second, '#', '#', '#', 
+//            '#', '#', '#');
+
+    this->_draw_field(other, begin_y_folder, begin_x_folder);
+
+    return 0;
+}
+
+
+void Render::_draw_flag_time(time_t time, short flag, 
+                             int y, int first_x, int second_x) {
+    this->_draw_table(y, first_x, 1, 3);
+    this->_draw_table(y, second_x, 1, 3);
+    move(y + 1, first_x + 1);
+    printw("%03d", time);
+    move(y + 1, second_x + 1);
+    printw("%03d", flag);
+    return ;
+}
+
+void Render::_draw_field(const Game_Minesweeper& other, int y, int x) {
+    move(y + 1, x + 1);
     this->_color.set_color(COLOR::DEFAULT_BLUE);
-    for (int i = 0; i < size_field.first; i++) {
-        for (int j = 0; j < size_field.second; j++) {
-	        auto value = other.get_index(i, j);
-	        switch ( value.first ) {
-		        case TYPE_CELL::HIDDEN :
+    auto size = other.size();
+    for (int i = 0; i < size.first; i++) {
+        for (int j = 0; j < size.second; j++) {
+       	    auto value = other.get_cell(i, j);
+            switch (value.first) {
+                case TYPE_CELL::HIDDEN :
 		            this->_color.set_color(COLOR::DEFAULT_BLUE);
                     addch(' ');
       		        break;
@@ -124,11 +155,11 @@ int Render::draw_game(const Minesweeper& other, int y, int x) {
 		        default:
 		          addch(' ');
 		          break;
-	     } 
-	 }
-     move(i + 1, 0);
-     }
-     move(y, x);
-     this->_color.set_color(COLOR::DEFAULT);
-     return 0;
+	        } 
+	    }
+        this->_color.set_color(COLOR::DEFAULT);
+        move(y + i + 2, x + 1);
+    }
+    move(y + 1 + other.get_cursor_y(), x + 1 + other.get_cursor_x());
+    return ;
 }
