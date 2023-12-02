@@ -14,7 +14,7 @@ void Timer::start() {
 
 void Timer::stop() {
     this->_run_timer = false;
-    this->_pause_time = Timer::time() - this->_start_time;
+    this->_pause_time += Timer::time() - this->_start_time;
     this->_start_time = 0;
     return ;
 }
@@ -27,8 +27,8 @@ void Timer::reset() {
 }
 
 time_t Timer::get_time() const {
-    if ( this->_start_time == 0 ) {
-        return 0;
+    if ( !this->_run_timer ) {
+        return this->_pause_time;
     }
     return this->_pause_time + Timer::time() - this->_start_time;
 }

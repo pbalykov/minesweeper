@@ -9,23 +9,21 @@ namespace {
     }
 }
 
-void Render::_draw_table(int begin_y, int begin_x, int y, int x,
-        int first_begin, int second_begin, int first_end, int second_end, 
-        int center_x, int center_y) const {
+void Render::_draw_table(int begin_y, int begin_x, int y, int x) const {
     move(begin_y, begin_x);
-   	addch(first_begin);
-    repeat(center_x, x);
-	addch(second_begin);
+   	addch(ACS_ULCORNER);
+    repeat(ACS_HLINE, x);
+	addch(ACS_URCORNER);
 	for (int i = 0; i < y; i++) {
 	    move(begin_y + i + 1, begin_x);
-	    addch(center_y);
+	    addch(ACS_VLINE);
 	    move(begin_y + i + 1, begin_x + x + 1);
-	    addch(center_y);
+	    addch(ACS_VLINE);
 	}
     move(begin_y + y + 1, begin_x);
-    addch(first_end);
-	repeat(center_x, x);
-	addch(second_end);
+    addch(ACS_LLCORNER);
+	repeat(ACS_HLINE, x);
+	addch(ACS_LRCORNER);
     move(begin_y + y + 1, begin_x + x + 1);
     return ;
 }
@@ -93,12 +91,11 @@ int Render::draw_game(const Game_Minesweeper& other) {
     int begin_x_folder = x / 2 - size_field.second / 2;
     time_t time = other.get_time();
     short flag = other.get_flag();
+    if ( other.get_end_game() ) {
+        this->_draw_message_end(other, begin_y_folder - 4, x);
+    }
     this->_draw_flag_time(time, flag, begin_y_folder - 3, begin_x_folder - 3,
-                          begin_x_folder + size_field.second);
-//    this->_draw_table(begin_y_folder, begin_x_folder, 
-//            size_field.first, size_field.second, '#', '#', '#', 
-//            '#', '#', '#');
-
+                          begin_x_folder + size_field.second - 2);
     this->_draw_field(other, begin_y_folder, begin_x_folder);
 
     return 0;
@@ -116,8 +113,29 @@ void Render::_draw_flag_time(time_t time, short flag,
     return ;
 }
 
+void Render::_draw_message_end(const Game_Minesweeper& other, int y, int x) {
+    std::string_view value = other.message_end_game();
+    move(y,  x / 2 - value.size() / 2);
+    attron(A_BOLD);
+    switch ( other.type_end_game() ) {
+        case Game_Minesweeper::TYPE_END_GAME::WON : 
+            this->_color.set_color(COLOR::GREEN);
+            printw("%s", value.data());
+            this->_color.set_color(COLOR::DEFAULT);
+            break;
+        default:
+            this->_color.set_color(COLOR::RED);
+            printw("%s", value.data());
+            this->_color.set_color(COLOR::DEFAULT);
+            break;
+    }
+   	attroff(A_BOLD);
+    return ;
+}
+
+
 void Render::_draw_field(const Game_Minesweeper& other, int y, int x) {
-    move(y + 1, x + 1);
+    move(y, x);
     this->_color.set_color(COLOR::DEFAULT_BLUE);
     auto size = other.size();
     for (int i = 0; i < size.first; i++) {
@@ -158,8 +176,8 @@ void Render::_draw_field(const Game_Minesweeper& other, int y, int x) {
 	        } 
 	    }
         this->_color.set_color(COLOR::DEFAULT);
-        move(y + i + 2, x + 1);
+        move(y + i + 1, x);
     }
-    move(y + 1 + other.get_cursor_y(), x + 1 + other.get_cursor_x());
+    move(y + other.get_cursor_y(), x + other.get_cursor_x());
     return ;
 }

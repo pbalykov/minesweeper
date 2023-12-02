@@ -4,12 +4,7 @@
 #include "minesweeper.hpp"
 #include "timer.hpp"
 
-enum class TYPE_END_GAME {
-    WING = 1,
-    NONE = 0,
-    LOSS = -1,
-    END_TIME = -2,
-};
+#include <string_view>
 
 class Game_Minesweeper {
 public:
@@ -23,10 +18,16 @@ public:
         DELETE,
     };
 
+    enum class TYPE_END_GAME {
+        WON,
+        LOSE,
+        NONE,
+        TIMES,
+    };
+
     Game_Minesweeper(time_t max_time = 1000);
     void start(const Complexity_Game& value);
     void pause();
-    bool get_end_game() const;
     const Minesweeper& get_minesweeper() const;
     time_t get_time() const;
     std::pair<int, int> size() const;
@@ -36,7 +37,15 @@ public:
     int get_cursor_y() const;
     short get_flag() const;
 
+    bool get_end_game();
+    bool get_end_game() const;
+    TYPE_END_GAME type_end_game() const;
+    std::string_view message_end_game() const;
+
 private:
+    static constexpr std::string_view MESSAGE_END_GAME_WON = "You Won!!";
+    static constexpr std::string_view MESSAGE_END_GAME_LOSE = "You Lose!";
+    static constexpr std::string_view MESSAGE_END_GAME_TIMES = "Time has run out!";
     int _cursor_x;
     int _cursor_y;
     time_t _max_time;

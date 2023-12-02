@@ -18,10 +18,6 @@ void Game_Minesweeper::pause() {
     return ;
 }
 
-bool Game_Minesweeper::get_end_game() const {
-    return this->_game.get_end_game(); 
-}
-
 const Minesweeper& Game_Minesweeper::get_minesweeper() const {
     return this->_game;
 }
@@ -36,6 +32,9 @@ std::pair<int, int> Game_Minesweeper::size() const {
 }
 
 void Game_Minesweeper::set_cell(TYPE_STEP other) {
+    if ( this->_max_time <= this->get_time() ) {
+        this->_time.stop();
+    }
     switch ( other ) {
         case TYPE_STEP::LEFT : 
             this->_cursor_x -= 1;
@@ -85,4 +84,51 @@ std::pair<TYPE_CELL, short> Game_Minesweeper::get_cell(int i, int j) const {
 
 short Game_Minesweeper::get_flag() const {
     return this->_game.get_number_flag();
+}
+
+bool Game_Minesweeper::get_end_game() {
+    bool end_ans = this->_game.get_end_game();
+    if ( end_ans ) {
+        this->_time.stop();
+    }
+    if ( this->_time.get_time() >= this->_max_time ) {
+        end_ans = false;
+        this->_time.stop();
+    }
+    return end_ans; 
+}
+
+bool Game_Minesweeper::get_end_game() const {
+    bool end_ans = this->_game.get_end_game();
+    if ( this->_time.get_time() >= this->_max_time ) {
+        end_ans = false;
+    }
+    return end_ans; 
+}
+
+Game_Minesweeper::TYPE_END_GAME Game_Minesweeper::type_end_game() const {
+    if ( this->_max_time <= this->get_time() ) { 
+        return Game_Minesweeper::TYPE_END_GAME::TIMES;
+    }
+    if ( this->_game.get_end_game() && this->_game.get_wing_game() ) {
+        return Game_Minesweeper::TYPE_END_GAME::WON;
+    }
+    if ( this->_game.get_end_game() ) {
+        return Game_Minesweeper::TYPE_END_GAME::LOSE;
+    }
+    return Game_Minesweeper::TYPE_END_GAME::NONE;
+}
+
+std::string_view Game_Minesweeper::message_end_game() const {
+    switch ( this->type_end_game() ) {
+        case Game_Minesweeper::TYPE_END_GAME::TIMES :    
+            return Game_Minesweeper::MESSAGE_END_GAME_TIMES;
+        case Game_Minesweeper::TYPE_END_GAME::WON :
+            return Game_Minesweeper::MESSAGE_END_GAME_WON;
+        case Game_Minesweeper::TYPE_END_GAME::LOSE :
+            return Game_Minesweeper::MESSAGE_END_GAME_LOSE;
+        default:
+            return std::string_view(); 
+    }
+    return std::string_view();
 }
