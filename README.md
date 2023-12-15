@@ -1,7 +1,5 @@
 # Minesweeper game
 
-# !!!!GAME works but not completely, no pause, no frame does not display end-of-game statistics
-
 ## Description of the project.
 
 This project is a miner game that includes source code, build automation scripts. This makes it easy to install and play the game. 

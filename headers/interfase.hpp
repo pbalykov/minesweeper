@@ -17,6 +17,15 @@ protected:
     int game();
     int abaut_game();
 
+    static constexpr std::string_view NAME_PROGMA[] = {
+    " __  __ _                                                   ",
+    "|  \\/  (_)_ __   ___  _____      _____  ___ _ __   ___  ___ ",
+    "| |\\/| | | '_ \\ / _ \\/ __\\ \\ /\\ / / _ \\/ _ \\ '_ \\ / _ \\/ __|",
+    "| |  | | | | | |  __/\\__ \\\\ V  V /  __/  __/ |_) |  __/\\__ \\",
+    "|_|  |_|_|_| |_|\\___||___/ \\_/\\_/ \\___|\\___| .__/ \\___||___/",
+    "                                           |_|              "
+    };
+
     static constexpr std::string_view MENU[] = {" MENU ",
     "Game", "About the game", "Exit"};
     
@@ -30,10 +39,12 @@ protected:
     static constexpr std::string_view COMPLEXITY[] = {" COMPLEXITY ",
     "Easy", "Normal", "Hard"};
 
+    static constexpr std::string_view START_OVER[] = {" Start Over? ",
+    "YES", "NO"};
+
+    
 private:    
     int _max_button_size(const std::string_view* value, int size_v);
-    int _main_menu();
-    
     int _choice_complexity(Complexity_Game& value);
 
     char* _error;

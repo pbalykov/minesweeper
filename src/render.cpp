@@ -38,11 +38,17 @@ Render::Render() {
     return ;
 }
 
-int Render::menu(const std::string_view* button, int size_y, int size_x, int cur) {
-    int y, x;
-    this->_size_terminal(y, x);
-    y = y / 2 - (size_y  + 1 ) / 2;
-    x = x / 2 - size_x / 2;
+int Render::_draw_name(int y, int x, const std::string_view* name, int size_name) {
+    move(y, x);
+    for (int i = 0; i < size_name; i++) {
+        printw("%s", name[i].data());
+        move(y + 1 + i, x);
+    }
+    return 0;
+}
+
+void Render::_draw_menu(int y, int x, const std::string_view* button, 
+                         int size_y, int size_x, int cur) {
     this->_draw_table(y, x, size_y + 1, size_x);
     move(y, x + ((size_x - button[0].size()) / 2) + 1); 
     printw("%s", button[0].data());
@@ -61,8 +67,35 @@ int Render::menu(const std::string_view* button, int size_y, int size_x, int cur
             printw("%s", button[i].data());
         }
     }
+    return ;
+}
+
+/*void Render::draw_menu_choice(const std::string_view& name, int size_x, int cur) {
+    int y, x;
+    this->_size_terminal(y, x);
+    y = y / 2 - 3 / 2;
+    x = x / 2 - size_x / 2;
+    this->_draw_table(y, x, 1, size_x);
+    move(y, x + (size_x / 2 - name.size() / 2));
+    printw("%s", name.data());
+}*/
+
+int Render::main_menu(const std::string_view* arr_button, int size_y, int size_x, 
+               int cur, const std::string_view* arr_name, int size_arr) {
+    int y, x;
+    this->_size_terminal(y, x);
+    if ( size_y + size_arr + 4 >= y ) {
+        return 1;
+    }
+    int begin_y = y / 2 - (size_y  + 1 ) / 2;
+    int begin_x = x / 2 - size_x / 2;
+    this->_draw_menu(begin_y, begin_x, arr_button, size_y, size_x, cur);
+    begin_y -= size_arr;
+    begin_x = x / 2 - arr_name[0].size() / 2;
+    this->_draw_name(begin_y, begin_x, arr_name, size_arr);   
     return 0;
 }
+
 
 int Render::abaut_game(const std::string_view* value, int size_y, int size_x) {
     int y, x;
@@ -98,6 +131,17 @@ int Render::draw_game(const Game_Minesweeper& other) {
                           begin_x_folder + size_field.second - 2);
     this->_draw_field(other, begin_y_folder, begin_x_folder);
 
+    return 0;
+}
+
+
+int Render::menu(const std::string_view* button, int button_y, int button_x, 
+                 int cur) {
+    int y, x;
+    this->_size_terminal(y, x);
+    y = y / 2 - (button_y  + 1 ) / 2;
+    x = x / 2 - button_x / 2;
+    this->_draw_menu(y, x, button, button_y, button_x, cur);
     return 0;
 }
 

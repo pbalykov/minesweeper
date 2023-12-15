@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include <ncurses.h>
-#include <cstring>
+#include <string.h>
 
 int Interfase::_max_button_size(const std::string_view* value, int size_v) {
     int max = 0;
@@ -26,7 +26,7 @@ Interfase::Interfase() : _error(nullptr), _render(nullptr) {
 }
 
 int Interfase::exec() {
-    this->_main_menu();
+    this->menu();
     return 0;
 }
 
@@ -34,26 +34,33 @@ Interfase::~Interfase() {
     endwin();
     if ( this->_error ) {
        fprintf(stderr, "Error: %s\n", this->_error);
-       std::free(this->_error);
+       free(this->_error);
     }
     delete this->_render;
     return ;
 }
 
-int Interfase::_main_menu() {
+int Interfase::menu() {
     int cursor = 0;
-    int size_y = sizeof(Interfase::MENU) / sizeof(std::string_view) - 1;
-    int size_x = this->_max_button_size(Interfase::MENU, size_y);
-    do {
+    int size_menu_y = sizeof(Interfase::MENU) / sizeof(std::string_view);
+    int size_menu_x = this->_max_button_size(Interfase::MENU, size_menu_y);
+    int size_name = sizeof(Interfase::NAME_PROGMA) / sizeof(std::string_view);
+    int size_menu = size_menu_y - 1;
+    for ( ; ;) {
         wclear(stdscr);
-        this->_render->menu(Interfase::MENU, size_y + 1, size_x, cursor + 1);
+        int error = this->_render->main_menu(Interfase::MENU, size_menu_y, size_menu_x, 
+                                 cursor + 1, Interfase::NAME_PROGMA, size_name);
+        if ( error ) {
+            this->_error = strdup("Размер!");
+            return 1;
+        }
       	auto key = getch();
         switch (key) {
             case KEY_UP :
-                cursor = ( (cursor - 1) % size_y + size_y) % size_y;
+                cursor = ( (cursor - 1) % size_menu + size_menu) % size_menu; 
                 break;
     	    case KEY_DOWN :
-                cursor = ( (cursor + 1) % size_y + size_y) % size_y;
+                cursor = ( (cursor + 1) % size_menu + size_menu) % size_menu;
 	            break;
             case '\n' : 
             {
@@ -71,7 +78,7 @@ int Interfase::_main_menu() {
                 }
             }
         }
-    } while (true);
+    } 
     return 0;
 }
 
@@ -107,12 +114,16 @@ int Interfase::game() {
 	        case '\n':
                 this->_game.set_cell(Game_Minesweeper::TYPE_STEP::OPEN);
        		    break;
+            default :
+                break;
         }
     }
     timeout(-1);
     wclear(stdscr);
     this->_render->draw_game(this->_game);
     getch();
+ //   this->_render->draw_menu_choice(" Start over? ", 15);
+ //   getch();
     return 0;
 }
 
