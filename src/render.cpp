@@ -70,28 +70,21 @@ void Render::_draw_menu(int y, int x, const std::string_view* button,
     return ;
 }
 
-/*void Render::draw_menu_choice(const std::string_view& name, int size_x, int cur) {
-    int y, x;
-    this->_size_terminal(y, x);
-    y = y / 2 - 3 / 2;
-    x = x / 2 - size_x / 2;
-    this->_draw_table(y, x, 1, size_x);
-    move(y, x + (size_x / 2 - name.size() / 2));
-    printw("%s", name.data());
-}*/
-
 int Render::main_menu(const std::string_view* arr_button, int size_y, int size_x, 
                int cur, const std::string_view* arr_name, int size_arr) {
     int y, x;
     this->_size_terminal(y, x);
-    if ( size_y + size_arr + 4 >= y ) {
-        return 1;
-    }
     int begin_y = y / 2 - (size_y  + 1 ) / 2;
     int begin_x = x / 2 - size_x / 2;
+    if ( begin_y < 0 || begin_x < 0 ) {
+        return 1;
+    }
     this->_draw_menu(begin_y, begin_x, arr_button, size_y, size_x, cur);
     begin_y -= size_arr;
     begin_x = x / 2 - arr_name[0].size() / 2;
+    if ( begin_y < 0 || begin_x < 0 ) {
+        return 1;
+    }
     this->_draw_name(begin_y, begin_x, arr_name, size_arr);   
     return 0;
 }

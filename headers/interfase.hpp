@@ -41,7 +41,6 @@ protected:
 
     static constexpr std::string_view START_OVER[] = {" Start Over? ",
     "YES", "NO"};
-
     
 private:    
     int _max_button_size(const std::string_view* value, int size_v);

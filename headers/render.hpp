@@ -14,8 +14,7 @@ public:
                   int cur, const std::string_view* arr_name, int size_arr);
     int abaut_game(const std::string_view* value, int size_y, int size_x);
     int draw_game(const Game_Minesweeper& value);
-    int menu(const std::string_view* button, int button_y, int button_x, 
-             int cur);
+    int menu(const std::string_view* button, int button_y, int button_x, int cur);
 
 private:
     void _size_terminal(int& y, int& x) const;

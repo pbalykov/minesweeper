@@ -21,6 +21,7 @@ Interfase::Interfase() : _error(nullptr), _render(nullptr) {
     this->_render = new Render;
     keypad(stdscr, true);  
     cbreak();
+    curs_set(0);
     std::srand(std::time(nullptr));
     return ;
 }
@@ -31,6 +32,7 @@ int Interfase::exec() {
 }
 
 Interfase::~Interfase() { 
+    curs_set(1);
     endwin();
     if ( this->_error ) {
        fprintf(stderr, "Error: %s\n", this->_error);
@@ -51,7 +53,7 @@ int Interfase::menu() {
         int error = this->_render->main_menu(Interfase::MENU, size_menu_y, size_menu_x, 
                                  cursor + 1, Interfase::NAME_PROGMA, size_name);
         if ( error ) {
-            this->_error = strdup("Размер!");
+            this->_error = strdup("size terminal!");
             return 1;
         }
       	auto key = getch();
@@ -64,7 +66,7 @@ int Interfase::menu() {
 	            break;
             case '\n' : 
             {
-                switch (cursor ) {
+                switch ( cursor ) {
                     case 0:
                         this->game();
                         break;
@@ -87,6 +89,7 @@ int Interfase::game() {
     this->_choice_complexity(complexity);
     this->_game.start(complexity);
     auto len_game = this->_game.size();
+    curs_set(1);
     timeout(500);
     while ( !this->_game.get_end_game() ) {
         wclear(stdscr);
@@ -122,8 +125,7 @@ int Interfase::game() {
     wclear(stdscr);
     this->_render->draw_game(this->_game);
     getch();
- //   this->_render->draw_menu_choice(" Start over? ", 15);
- //   getch();
+    curs_set(0);
     return 0;
 }
 

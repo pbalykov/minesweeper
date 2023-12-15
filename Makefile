@@ -15,24 +15,23 @@ obj:
 	mkdir -p obj
 
 main: $(patsubst $(SRC)%.cpp,$(OBJ)%.o,$(wildcard $(SRC)*.cpp))
-	c++ $^ -o bin/$(NAME) $(NCURSES_LD) $(SANITIZE) -g 
+	c++ $^ -o bin/$(NAME) $(NCURSES_LD) -O3 
 
 $(OBJ)interface.o: $(SRC)interface.cpp
-	c++ -c $^ -o $@  $(NCURSES_HEADER) $(SANITIZE) -g
+	c++ -c $^ -o $@  $(NCURSES_HEADER) -O3
 
 $(OBJ)render.o: $(SRC)render.cpp
-	c++ -c $^ -o $@  $(NCURSES_HEADER) $(SANITIZE) -g
+	c++ -c $^ -o $@  $(NCURSES_HEADER) -O3 
 
 $(OBJ)color_game.o: $(SRC)color_game.cpp
-	c++ -c $^ -o $@  $(NCURSES_HEADER) $(SANITIZE) -g
+	c++ -c $^ -o $@  $(NCURSES_HEADER) -O3
 
 
 $(OBJ)%.o: $(SRC)%.cpp
-	c++ -c $^ -o $@ -g $(SANITIZE)
+	c++ -c $^ -o $@ -O3
 
 run: all
-	./bin/$(NAME) 2> error
-	cat error
+	./bin/$(NAME)
 
 clean:
 	rm -rf bin obj 
