@@ -89,11 +89,12 @@ int Interfase::game() {
     this->_choice_complexity(complexity);
     this->_game.start(complexity);
     auto len_game = this->_game.size();
+    int size_bar = sizeof(Interfase::BAR_CONTROL) / sizeof(std::string_view);
     curs_set(1);
     timeout(500);
     while ( !this->_game.get_end_game() ) {
         wclear(stdscr);
-        this->_render->draw_game(this->_game);
+        this->_render->draw_game(this->_game, Interfase::BAR_CONTROL, size_bar);
       	auto key = getch();
         switch ( key ) {
     	    case KEY_UP :
@@ -123,7 +124,7 @@ int Interfase::game() {
     }
     timeout(-1);
     wclear(stdscr);
-    this->_render->draw_game(this->_game);
+    this->_render->draw_game(this->_game, Interfase::BAR_CONTROL, size_bar);
     getch();
     curs_set(0);
     return 0;

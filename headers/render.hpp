@@ -13,10 +13,12 @@ public:
     int main_menu(const std::string_view* button, int size_y, int size_x, 
                   int cur, const std::string_view* arr_name, int size_arr);
     int abaut_game(const std::string_view* value, int size_y, int size_x);
-    int draw_game(const Game_Minesweeper& value);
+    int draw_game(const Game_Minesweeper& other, const std::string_view* button,
+                      int button_size);
     int menu(const std::string_view* button, int button_y, int button_x, int cur);
 
 private:
+    void _draw_bar(const std::string_view* button, int size);
     void _size_terminal(int& y, int& x) const;
     void _draw_table(int begin_y, int begin_x, int y, int x) const;
     void _draw_flag_time(time_t time, short flag, int y, int first_x, int second_x);

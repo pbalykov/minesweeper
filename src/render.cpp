@@ -109,7 +109,9 @@ int Render::abaut_game(const std::string_view* value, int size_y, int size_x) {
     return 0;
 }
 
-int Render::draw_game(const Game_Minesweeper& other) {
+int Render::draw_game(const Game_Minesweeper& other, const std::string_view* button,
+                      int button_size) {
+    this->_draw_bar(button, button_size);
     auto size_field = other.size();
     int y, x;
     this->_size_terminal(y, x);
@@ -136,6 +138,24 @@ int Render::menu(const std::string_view* button, int button_y, int button_x,
     x = x / 2 - button_x / 2;
     this->_draw_menu(y, x, button, button_y, button_x, cur);
     return 0;
+}
+
+void Render::_draw_bar(const std::string_view* button, int size) {
+    int y, x;
+    this->_size_terminal(y, x);
+    move(y - 1, 0);
+    int m_size = 0;
+    for (int i = 0; i < size; i+=2) {
+        printw("%s ", button[i].data());
+        this->_color.set_color(COLOR::GREY);
+        printw("%s ", button[i + 1].data());
+        m_size += button[i + 1].size() + button[i].size() + 2;
+        this->_color.set_color(COLOR::DEFAULT);
+    }
+    this->_color.set_color(COLOR::GREY);
+    repeat(' ', x - m_size);
+    this->_color.set_color(COLOR::DEFAULT);
+    return ;
 }
 
 
