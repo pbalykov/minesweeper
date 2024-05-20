@@ -40,7 +40,7 @@ protected:
     "Easy", "Normal", "Hard"};
 
     static constexpr std::string_view BAR_CONTROL[] = {"Enter", "Choice", "f", 
-    "Setting the flag", "BACKSPACE", "del the flag"};
+    "Setting the flag", "SPACE", "del the flag", "q", "exit"};
 
     
 private:    

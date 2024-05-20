@@ -112,12 +112,15 @@ int Interfase::game() {
     	    case 'f':
                 this->_game.set_cell(Game_Minesweeper::TYPE_STEP::FLAG);
         		break;
-    	    case KEY_BACKSPACE :
+    	    case ' ' :
                 this->_game.set_cell(Game_Minesweeper::TYPE_STEP::DELETE);
        		    break;
 	        case '\n':
                 this->_game.set_cell(Game_Minesweeper::TYPE_STEP::OPEN);
        		    break;
+            case 'q':
+                this->~Interfase();
+                exit(0);
             default :
                 break;
         }
