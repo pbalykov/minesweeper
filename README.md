@@ -6,7 +6,7 @@ This project is a miner game that includes source code, build automation scripts
 
 ## Software dependencies.
 
-* C++14
+* C++17
 * Make 4.4.1
 * libncurses5-dev 
 * pkg-config
