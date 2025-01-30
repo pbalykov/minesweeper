@@ -131,8 +131,8 @@ int Interfase::game() {
         wclear(stdscr);
         this->_render->draw_game(this->_game, Interfase::BAR_CONTROL, size_bar);
         getch();
+        curs_set(0);
     } while ( !this->_play_again() ) ;
-    curs_set(0);
     return 0;
 }
 
@@ -182,22 +182,20 @@ int Interfase::_choice_complexity(Complexity_Game& value) {
 }
 
 bool Interfase::_play_again() {
-    int size_y = sizeof(Interfase::PLAY_AGAIN) / sizeof(std::string_view) - 1;
-
-    int size_x = this->_max_button_size(Interfase::PLAY_AGAIN, size_y);
     int cursor = 0;
     bool end_play_again = true;
+    int size_bar = sizeof(Interfase::BAR_CONTROL) / sizeof(std::string_view);
     for ( ;end_play_again; ) {
         wclear(stdscr);
-
-        this->_render->menu(Interfase::PLAY_AGAIN, size_y + 1, size_x, cursor + 1);
+        this->_render->draw_game(this->_game, Interfase::BAR_CONTROL, size_bar);
+        this->_render->meny_YES_NO(Interfase::PLAY_AGAIN, cursor);
         auto key = getch();
         switch ( key ) {
-            case KEY_UP :
-                cursor = ( (cursor - 1) % size_y + size_y) % size_y;
+            case KEY_LEFT :
+                cursor = ( (cursor - 1) % 2 + 2) % 2;
                 break;
-    	    case KEY_DOWN :
-                cursor = ( (cursor + 1) % size_y + size_y) % size_y;
+    	    case KEY_RIGHT :
+                cursor = ( (cursor + 1) % 2 + 2) % 2;
 	            break;
             case '\n':
                 end_play_again = false;

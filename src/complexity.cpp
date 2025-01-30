@@ -6,7 +6,7 @@ Complexity_Game::Complexity_Game(COMPLEXITY value) {
 	    *this = Complexity_Game(9, 9, 10);
             break;
         case COMPLEXITY::NORMAL :
-	    *this = Complexity_Game(16, 16, 40);
+	    *this = Complexity_Game(16, 17, 45);
 	    break;
         case COMPLEXITY::HARD :
 	    *this = Complexity_Game(16, 30, 99);

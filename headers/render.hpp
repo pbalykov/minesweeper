@@ -16,7 +16,9 @@ public:
     int draw_game(const Game_Minesweeper& other, const std::string_view* button,
                       int button_size);
     int menu(const std::string_view* button, int button_y, int button_x, int cur);
-
+    
+    int meny_YES_NO(const std::string_view NAME, int currsor);
+    
 private:
     void _draw_bar(const std::string_view* button, int size);
     void _size_terminal(int& y, int& x) const;

@@ -17,7 +17,8 @@ void Render::_draw_table(int begin_y, int begin_x, int y, int x) const {
 	for (int i = 0; i < y; i++) {
 	    move(begin_y + i + 1, begin_x);
 	    addch(ACS_VLINE);
-	    move(begin_y + i + 1, begin_x + x + 1);
+        printw("%*c", x, ' ');
+        move(begin_y + i + 1, begin_x + x + 1);
 	    addch(ACS_VLINE);
 	}
     move(begin_y + y + 1, begin_x);
@@ -137,6 +138,24 @@ int Render::menu(const std::string_view* button, int button_y, int button_x,
     y = y / 2 - (button_y  + 1 ) / 2;
     x = x / 2 - button_x / 2;
     this->_draw_menu(y, x, button, button_y, button_x, cur);
+    return 0;
+}
+
+int Render::meny_YES_NO(const std::string_view NAME, int currsor) {
+    int y, x;
+    this->_size_terminal(y, x); 
+    y = y / 2 - 1;
+    x = x / 2 - (NAME.size() + 2) / 2;
+    this->_draw_table(y, x, 2, NAME.size());
+    move(y, x + 1);
+    printw("%s", NAME.data());
+    move(y + 2, x + 1);    
+    this->_color.set_color(!currsor? COLOR::GREY : COLOR::DEFAULT);
+    printw(" Yes ");
+    this->_color.set_color(!currsor ? COLOR::DEFAULT : COLOR::GREY);
+    move(y + 2, x + NAME.size() - 3);
+    printw(" No ");
+    this->_color.set_color(COLOR::DEFAULT);
     return 0;
 }
 
