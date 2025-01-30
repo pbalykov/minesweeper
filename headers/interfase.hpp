@@ -42,10 +42,14 @@ protected:
     static constexpr std::string_view BAR_CONTROL[] = {"Enter", "Choice", "f", 
     "Setting the flag", "SPACE", "del the flag", "q", "exit"};
 
+    static constexpr std::string_view PLAY_AGAIN[] = {" PLAY AGAIN ", 
+    "Yes", "No"};
     
 private:    
     int _max_button_size(const std::string_view* value, int size_v);
     int _choice_complexity(Complexity_Game& value);
+    
+    bool _play_again();
 
     char* _error;
     Render* _render;

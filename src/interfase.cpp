@@ -86,49 +86,52 @@ int Interfase::menu() {
 
 int Interfase::game() {
     Complexity_Game complexity;
-    this->_choice_complexity(complexity);
-    this->_game.start(complexity);
-    auto len_game = this->_game.size();
-    int size_bar = sizeof(Interfase::BAR_CONTROL) / sizeof(std::string_view);
-    curs_set(1);
-    timeout(500);
-    while ( !this->_game.get_end_game() ) {
+    if ( this->_choice_complexity(complexity) )
+        return 0;
+    do {
+        this->_game.start(complexity);
+        auto len_game = this->_game.size();
+        int size_bar = sizeof(Interfase::BAR_CONTROL) / sizeof(std::string_view);
+        curs_set(1);
+        timeout(500);
+        while ( !this->_game.get_end_game() ) {
+            wclear(stdscr);
+            this->_render->draw_game(this->_game, Interfase::BAR_CONTROL, size_bar);
+            auto key = getch();
+            switch ( key ) {
+                case KEY_UP :
+                    this->_game.set_cell(Game_Minesweeper::TYPE_STEP::UP);
+                    break;
+                case KEY_DOWN :
+                    this->_game.set_cell(Game_Minesweeper::TYPE_STEP::DOWN);
+                    break;
+                case KEY_LEFT :
+                    this->_game.set_cell(Game_Minesweeper::TYPE_STEP::LEFT);
+                    break;
+                case KEY_RIGHT :
+                    this->_game.set_cell(Game_Minesweeper::TYPE_STEP::RIGHT);
+                    break;
+                case 'f':
+                    this->_game.set_cell(Game_Minesweeper::TYPE_STEP::FLAG);
+                    break;
+                case ' ' :
+                    this->_game.set_cell(Game_Minesweeper::TYPE_STEP::DELETE);
+                    break;
+                case '\n':
+                    this->_game.set_cell(Game_Minesweeper::TYPE_STEP::OPEN);
+                    break;
+                case 'q':
+                    this->~Interfase();
+                    exit(0);
+                default :
+                    break;
+            }
+        }
+        timeout(-1);
         wclear(stdscr);
         this->_render->draw_game(this->_game, Interfase::BAR_CONTROL, size_bar);
-      	auto key = getch();
-        switch ( key ) {
-    	    case KEY_UP :
-                this->_game.set_cell(Game_Minesweeper::TYPE_STEP::UP);
-                break;
-    	    case KEY_DOWN :
-                this->_game.set_cell(Game_Minesweeper::TYPE_STEP::DOWN);
-    	        break;
-    	    case KEY_LEFT :
-                this->_game.set_cell(Game_Minesweeper::TYPE_STEP::LEFT);
-        		break;
-    	    case KEY_RIGHT :
-	            this->_game.set_cell(Game_Minesweeper::TYPE_STEP::RIGHT);
-    	        break;
-    	    case 'f':
-                this->_game.set_cell(Game_Minesweeper::TYPE_STEP::FLAG);
-        		break;
-    	    case ' ' :
-                this->_game.set_cell(Game_Minesweeper::TYPE_STEP::DELETE);
-       		    break;
-	        case '\n':
-                this->_game.set_cell(Game_Minesweeper::TYPE_STEP::OPEN);
-       		    break;
-            case 'q':
-                this->~Interfase();
-                exit(0);
-            default :
-                break;
-        }
-    }
-    timeout(-1);
-    wclear(stdscr);
-    this->_render->draw_game(this->_game, Interfase::BAR_CONTROL, size_bar);
-    getch();
+        getch();
+    } while ( !this->_play_again() ) ;
     curs_set(0);
     return 0;
 }
@@ -161,6 +164,8 @@ int Interfase::_choice_complexity(Complexity_Game& value) {
         this->_render->menu(Interfase::COMPLEXITY, size_y + 1, size_x, cursor + 1);
         auto key = getch();
         switch ( key ) {
+            case 27:
+                return 1;
             case KEY_UP :
                 cursor = ( (cursor - 1) % size_y + size_y) % size_y;
                 break;
@@ -174,4 +179,30 @@ int Interfase::_choice_complexity(Complexity_Game& value) {
         }
     }
     return 0;
+}
+
+bool Interfase::_play_again() {
+    int size_y = sizeof(Interfase::PLAY_AGAIN) / sizeof(std::string_view) - 1;
+
+    int size_x = this->_max_button_size(Interfase::PLAY_AGAIN, size_y);
+    int cursor = 0;
+    bool end_play_again = true;
+    for ( ;end_play_again; ) {
+        wclear(stdscr);
+
+        this->_render->menu(Interfase::PLAY_AGAIN, size_y + 1, size_x, cursor + 1);
+        auto key = getch();
+        switch ( key ) {
+            case KEY_UP :
+                cursor = ( (cursor - 1) % size_y + size_y) % size_y;
+                break;
+    	    case KEY_DOWN :
+                cursor = ( (cursor + 1) % size_y + size_y) % size_y;
+	            break;
+            case '\n':
+                end_play_again = false;
+                break;
+        }
+    }
+    return cursor;
 }
