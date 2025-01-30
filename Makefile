@@ -5,7 +5,7 @@ NCURSES_HEADER = `pkg-config --cflags ncurses`
 NCURSES_LD = `pkg-config --libs ncurses`
 SRC = src/
 OBJ = obj/
-SANITIZE = -fsanitize=address -fsanitize=undefined 
+
 
 all: bin obj main
 

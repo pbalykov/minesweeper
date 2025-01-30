@@ -113,6 +113,12 @@ int Render::abaut_game(const std::string_view* value, int size_y, int size_x) {
 int Render::draw_game(const Game_Minesweeper& other, const std::string_view* button,
                       int button_size) {
     this->_draw_bar(button, button_size);
+    this->draw_game(other);
+    return 0;
+}
+
+
+int Render::draw_game(const Game_Minesweeper& other) {
     auto size_field = other.size();
     int y, x;
     this->_size_terminal(y, x);
@@ -126,7 +132,6 @@ int Render::draw_game(const Game_Minesweeper& other, const std::string_view* but
     this->_draw_flag_time(time, flag, begin_y_folder - 3, begin_x_folder - 3,
                           begin_x_folder + size_field.second - 2);
     this->_draw_field(other, begin_y_folder, begin_x_folder);
-
     return 0;
 }
 

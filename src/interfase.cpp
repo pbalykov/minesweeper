@@ -129,7 +129,7 @@ int Interfase::game() {
         }
         timeout(-1);
         wclear(stdscr);
-        this->_render->draw_game(this->_game, Interfase::BAR_CONTROL, size_bar);
+        this->_render->draw_game(this->_game);
         getch();
         curs_set(0);
     } while ( !this->_play_again() ) ;
@@ -184,10 +184,9 @@ int Interfase::_choice_complexity(Complexity_Game& value) {
 bool Interfase::_play_again() {
     int cursor = 0;
     bool end_play_again = true;
-    int size_bar = sizeof(Interfase::BAR_CONTROL) / sizeof(std::string_view);
     for ( ;end_play_again; ) {
         wclear(stdscr);
-        this->_render->draw_game(this->_game, Interfase::BAR_CONTROL, size_bar);
+        this->_render->draw_game(this->_game);
         this->_render->meny_YES_NO(Interfase::PLAY_AGAIN, cursor);
         auto key = getch();
         switch ( key ) {

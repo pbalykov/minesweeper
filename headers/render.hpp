@@ -15,6 +15,7 @@ public:
     int abaut_game(const std::string_view* value, int size_y, int size_x);
     int draw_game(const Game_Minesweeper& other, const std::string_view* button,
                       int button_size);
+    int draw_game(const Game_Minesweeper& other);
     int menu(const std::string_view* button, int button_y, int button_x, int cur);
     
     int meny_YES_NO(const std::string_view NAME, int currsor);
